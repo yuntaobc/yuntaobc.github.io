@@ -66,7 +66,7 @@
 
 
 
-  <meta name="keywords" content="Blog,">
+  <meta name="keywords" content="Hexo, NexT">
 
 
 
@@ -77,18 +77,19 @@
 
 
 
-<meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.">
-<meta name="keywords" content="Blog">
+<meta name="description" content="交换机可以将一个交换式局域网划分成多个 VLAN，但是交换机无法在第 2 层上提供不同 VLAN 间的通信，需要将第 2 层上的 VLAN 间通信转化成为第 3 层上的 IP 通信，即为每个第 2 层的 VLAN 分配一个第 3 层的 IP，通过第 3 层的 IP 路由技术以及第 3 层的设备（如路由器或 3 层交换机）来实现VLAN间的通信。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="http://yoursite.com/2019/01/24/hello-world/index.html">
+<meta property="og:title" content="网络设备组网应用4-不同VLAN间进行通信的路由配置">
+<meta property="og:url" content="http://yoursite.com/2018/06/05/网络设备组网应用4-不同VLAN间进行通信的路由配置/index.html">
 <meta property="og:site_name" content="ht&#39;s blog">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.">
+<meta property="og:description" content="交换机可以将一个交换式局域网划分成多个 VLAN，但是交换机无法在第 2 层上提供不同 VLAN 间的通信，需要将第 2 层上的 VLAN 间通信转化成为第 3 层上的 IP 通信，即为每个第 2 层的 VLAN 分配一个第 3 层的 IP，通过第 3 层的 IP 路由技术以及第 3 层的设备（如路由器或 3 层交换机）来实现VLAN间的通信。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-01-24T13:28:19.991Z">
+<meta property="og:image" content="https://htoc.top/img/tuopu4.png">
+<meta property="og:updated_time" content="2019-01-24T13:34:03.815Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hello World">
-<meta name="twitter:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.">
+<meta name="twitter:title" content="网络设备组网应用4-不同VLAN间进行通信的路由配置">
+<meta name="twitter:description" content="交换机可以将一个交换式局域网划分成多个 VLAN，但是交换机无法在第 2 层上提供不同 VLAN 间的通信，需要将第 2 层上的 VLAN 间通信转化成为第 3 层上的 IP 通信，即为每个第 2 层的 VLAN 分配一个第 3 层的 IP，通过第 3 层的 IP 路由技术以及第 3 层的设备（如路由器或 3 层交换机）来实现VLAN间的通信。">
+<meta name="twitter:image" content="https://htoc.top/img/tuopu4.png">
 
 
 
@@ -118,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/01/24/hello-world/">
+  <link rel="canonical" href="http://yoursite.com/2018/06/05/网络设备组网应用4-不同VLAN间进行通信的路由配置/">
 
 
 
 
 
-  <title>Hello World | ht's blog</title>
+  <title>网络设备组网应用4-不同VLAN间进行通信的路由配置 | ht's blog</title>
   
 
 
@@ -261,7 +262,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/24/hello-world/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/05/网络设备组网应用4-不同VLAN间进行通信的路由配置/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ht">
@@ -278,7 +279,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Hello World</h1>
+          <h1 class="post-title" itemprop="name headline">网络设备组网应用4-不同VLAN间进行通信的路由配置</h1>
         
 
         <div class="post-meta">
@@ -290,8 +291,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-24T16:44:56+08:00">
-                2019-01-24
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-05T00:00:00+08:00">
+                2018-06-05
               </time>
             
 
@@ -313,8 +314,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Blog/" itemprop="url" rel="index">
-                    <span itemprop="name">Blog</span>
+                  <a href="/categories/交换机/" itemprop="url" rel="index">
+                    <span itemprop="name">交换机</span>
                   </a>
                 </span>
 
@@ -350,16 +351,26 @@
       
 
       
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+        <p>交换机可以将一个交换式局域网划分成多个 VLAN，但是交换机无法在第 2 层上提供不同 VLAN 间的通信，需要将第 2 层上的 VLAN 间通信转化成为第 3 层上的 IP 通信，即为每个第 2 层的 VLAN 分配一个第 3 层的 IP，通过第 3 层的 IP 路由技术以及第 3 层的设备（如路由器或 3 层交换机）来实现VLAN间的通信。</p>
 <a id="more"></a>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+<p>路由器实现VLAN间的通信由两种方案：</p>
+<ol>
+<li><p>路由器的一个物理接口连接一个VLAN</p>
+<p>交换机使用属于某个 VLAN 的接入端口将该 VLAN 连接到路由器的一个物理接口上。此时接入链路上传输的是不携带 VLAN 信息的标准 MAC 帧，本方案中的路由器并不知晓 VLAN，VLAN信息只有交换机知道，路由器和计算机则只知道IP信息。</p>
+<p>此时，仅在交换机上配置VLAN，在路由器和计算机上配置VLAN所对应的IP。</p>
+</li>
+<li><p>路由器的一个物理接口连接多个VLAN(单臂路由器)</p>
+<p>交换机使用一个中继端口将所有 VLAN 连接到路由器的一个物理接口上。因此，本方案中的路由器是 VLAN 知晓的，与交换机相连的物理以太网接口必须使用中继协议，而不是标准的以太网协议。 </p>
+<p>需要在路由器物理接口上创建与所连 VLAN 数量相同的逻辑子接口，并为每个子接口配置相应的 IP 信息，物理接口上无需配置任何 IP 信息。</p>
+<p>创建子接口命令如下：</p>
+<p><strong>interface <em>type slot/port . subinterface-number</em></strong></p>
+<p>subinterface-number 范围 1 - 4294967293</p>
+<p>由于此时路由器连接交换机的接口是VLAN知晓的，要在子接口配置模式下使用 <strong>ebcapsulation dot1q <em>vlan-id</em> </strong> 指定该子接口的中继封装协议。</p>
+</li>
+</ol>
+<h4 id="配置示例"><a href="#配置示例" class="headerlink" title="配置示例"></a>配置示例</h4><p>拓扑图：</p>
+<p><img src="https://htoc.top/img/tuopu4.png" alt="拓扑图"></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在只有S1工作的情况下，不同VLAN下的PC1，PC2不能ping通</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 采用第二种方式配置单臂路由</span></span><br><span class="line"><span class="comment"># S1的 Fa0/5 接口配置为中继段口，传输来自Fa0/11 Fa0/6的流量</span></span><br><span class="line">S1(config)#int fa0/5</span><br><span class="line">S1(config-if)#switchport mode trunk</span><br><span class="line"><span class="comment"># 创建配置路由器子接口</span></span><br><span class="line">R1(config)#int fa0/1</span><br><span class="line">R1(config)#int fa0/1.10</span><br><span class="line">R1(config-subif)#encapsulation dot1q 10</span><br><span class="line">R1(config-subif)#ip address 172.17.10.1 255.255.255.0</span><br><span class="line">R1(config-subif)#exit</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置路由器接口Fa0/0</span></span><br><span class="line">R1(config)#int fa0/0</span><br><span class="line">R1(config-if)#ip address 172.17.50.1 255.255.255.0</span><br><span class="line">R1(config-if)#exit</span><br><span class="line"></span><br><span class="line"><span class="comment"># 此时可以在 web服务器 PC1 PC2 间进行通信</span></span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -375,12 +386,6 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/Blog/" rel="tag"># Blog</a>
-          
-        </div>
-      
 
       
       
@@ -390,8 +395,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/07/19/[Redtiger Hackit] Write up/" rel="next" title="Redtiger Hackit Write up">
-                <i class="fa fa-chevron-left"></i> Redtiger Hackit Write up
+              <a href="/2018/06/04/网络设备组网应用3-STP配置/" rel="next" title="网络设备组网应用3-STP配置">
+                <i class="fa fa-chevron-left"></i> 网络设备组网应用3-STP配置
               </a>
             
           </div>
@@ -399,6 +404,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/07/09/[Wechall] MySQL Writeup/" rel="prev" title="Wechall MySQL Write up">
+                Wechall MySQL Write up <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>

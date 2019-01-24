@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/icon.png?v=5.1.4">
+
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="在实际的网络规划和设计中，通常采用冗余拓扑结构以保证通信的可靠性。交换式以太网中的备份链路设计就是一种典型的冗余拓扑设计。但是，由于交换机是第 2 层设备，因此交换机之间的冗余连接设计所形成的交换机环路会导致严重的广播风暴，致使整个网络瘫痪。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网络设备组网应用3-STP配置">
+<meta property="og:url" content="http://yoursite.com/2018/06/04/网络设备组网应用3-STP配置/index.html">
+<meta property="og:site_name" content="ht&#39;s blog">
+<meta property="og:description" content="在实际的网络规划和设计中，通常采用冗余拓扑结构以保证通信的可靠性。交换式以太网中的备份链路设计就是一种典型的冗余拓扑设计。但是，由于交换机是第 2 层设备，因此交换机之间的冗余连接设计所形成的交换机环路会导致严重的广播风暴，致使整个网络瘫痪。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://htoc.top/img/tuopu3.png">
+<meta property="og:updated_time" content="2019-01-24T13:33:49.967Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="网络设备组网应用3-STP配置">
+<meta name="twitter:description" content="在实际的网络规划和设计中，通常采用冗余拓扑结构以保证通信的可靠性。交换式以太网中的备份链路设计就是一种典型的冗余拓扑设计。但是，由于交换机是第 2 层设备，因此交换机之间的冗余连接设计所形成的交换机环路会导致严重的广播风暴，致使整个网络瘫痪。">
+<meta name="twitter:image" content="https://htoc.top/img/tuopu3.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"remove","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/06/04/网络设备组网应用3-STP配置/">
+
+
+
+
+
+  <title>网络设备组网应用3-STP配置 | ht's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ht's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Record something</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/04/网络设备组网应用3-STP配置/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ht">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ht's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">网络设备组网应用3-STP配置</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-04T00:00:00+08:00">
+                2018-06-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/交换机/" itemprop="url" rel="index">
+                    <span itemprop="name">交换机</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在实际的网络规划和设计中，通常采用冗余拓扑结构以保证通信的可靠性。交换式以太网中的备份链路设计就是一种典型的冗余拓扑设计。但是，由于交换机是第 2 层设备，因此交换机之间的冗余连接设计所形成的交换机环路会导致严重的广播风暴，致使整个网络瘫痪。</p>
+<a id="more"></a>
+<p>####STP(Spanning Tree Protocol)协议基本功能和标准</p>
+<p>为了解决因冗余连接设计而引出的交换机环路问题，IEEE 开发了生成树协议(Spanning Tree Protocol，STP)。该协议的作用是在冗余拓扑上构建一个无环路的逻辑转发拓扑以消除数据流量环路的威胁，并提供快速的故障恢复功能。</p>
+<p>但是，802.1D 中设计的 50 秒内恢复链路故障这一指标远不能达到目前的一些语音、视频类的多媒体应用需求。因此，IEEE 又开发了 802.1w 快速生成树协议(RSTP)， 它对传统 STP 进行了优化，将网络拓扑的收敛时间减少到 1～10 秒。</p>
+<p>另外，802.1D 和 802.1w 所形成的 STP 逻辑拓扑都是独立于 VLAN 的，即网络中的所有 VLAN 共用一个 STP 拓扑，这样一来就无法在多 VLAN 的情况下根据需求让不同的 VLAN 使用不同的 STP，使得冗余链路只能用做备份，而不能提供负载均衡功 能。IEEE 针对这一问题，又开发了 802.1s 多生成树协议（MST），它能够为不同的 VLAN 生成不同的 STP 拓扑，充分利用冗余链路以提高网络的利用率。 </p>
+<p>思科Packet Tracer还支持两个自己的协议 PVST 和 快速PVST</p>
+<h4 id="STP协议中一些重要术语及其概念"><a href="#STP协议中一些重要术语及其概念" class="headerlink" title="STP协议中一些重要术语及其概念"></a>STP协议中一些重要术语及其概念</h4><ul>
+<li><p>网桥ID(Bridge ID)</p>
+<p>STP协议中，使用网桥ID标识一台交换机，网桥ID在网络中唯一，由交换机的优先级和MAC地址组合而成。</p>
+<p>优先级的范围 0 - 65535 默认值 32768</p>
+<p>PVST协议中的交换机优先级为 默认交换机优先级 + n(n = VLAN ID)</p>
+</li>
+<li><p>根网桥</p>
+<p>STP协议所形成的无环路逻辑转发拓扑实际上是一个树形拓扑。根网桥就是根节点。它是网桥ID最小的那台交换机。</p>
+<p><strong>网桥ID比较规则</strong>  交换机优先级 -&gt; 交换机MAC地址</p>
+</li>
+<li><p>路径开销</p>
+</li>
+<li><p>端口ID</p>
+</li>
+<li><p>根端口</p>
+</li>
+<li><p>指定网桥</p>
+</li>
+<li><p>指定端口和非指定端口</p>
+</li>
+</ul>
+<h4 id="STP协议中的端口状态"><a href="#STP协议中的端口状态" class="headerlink" title="STP协议中的端口状态"></a>STP协议中的端口状态</h4><ul>
+<li>关闭状态：不能收发任何帧。这是 STP 端口的初始状态。 </li>
+<li>阻塞状态：不能发送任何帧，不学习 MAC 地址，只接收 STP 协议的 BPDU。</li>
+<li>侦听状态：不能转发数据帧，不学习 MAC 地址，但能收发并处理 STP 协议 的 BPDU。侦听状态一般持续 15 秒。 </li>
+<li>学习状态：不能转发数据帧，但能学习 MAC 地址，收发并处理 STP 协议的 BPDU。学习状态一般持续 15 秒。 </li>
+<li>转发状态：可以正常地转发数据帧和 BPDU。处于转发状态的端口必须是指 定端口或根端口</li>
+</ul>
+<p>端口状态的变化一般发生在初始形成生成树或网络出现故障需要重新形成生成树的场合。 </p>
+<p>思科交换机支持一种 PortFast 技术。使用 PortFast 的交换机端口如果被配置为接 入端口，该端口会直接从阻塞状态转换到转发状态，绕过常规的 STP 侦听和学习状态。 通常在连接到单个 PC 或服务器的接入交换机端口上使用 PortFast，以便这些设备立即接入网络，而不必等待生成树收敛。当 PC 使用 DHCP 时，如果接入交换机的端口没有配置 PortFast，PC 可能在端口进入转发状态之前发送 DHCP 请求，从而无法获得可用的 IP 地址和其它信息。</p>
+<h4 id="STP协议的配置"><a href="#STP协议的配置" class="headerlink" title="STP协议的配置"></a>STP协议的配置</h4><p>STP 协议的主要配置内容包括：开启和关闭 STP、配置交换机的优先级、配置端口路径开销、配置端口优先级、配置 STP 协议的一些定时器，等等。其中，在交换机上设置交换机的优先级、端口路径开销和端口优先级都会引起网络生成树拓扑的重新计算。在实际应用中，如果不存在物理的交换环路，则可关闭 STP。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 配置指令</span></span><br><span class="line"><span class="comment"># 全局配置模式下设置交换机的优先级</span></span><br><span class="line">spanning-tree vlan 9 priority</span><br><span class="line"><span class="comment"># 查看交换机STP协议的运行情况</span></span><br><span class="line">show spanning-tree</span><br><span class="line"><span class="comment"># 查看交换机某个VLAN的STP协议运行情况</span></span><br><span class="line">show spanning-tree vlan 9</span><br></pre></td></tr></table></figure>
+<h4 id="配置STP示例"><a href="#配置STP示例" class="headerlink" title="配置STP示例"></a>配置STP示例</h4><p>拓扑图</p>
+<p><img src="https://htoc.top/img/tuopu3.png" alt="拓扑图3"></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看交换机上每个VLAN的生成树协议</span></span><br><span class="line">S1#show spanning-tree</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">VLAN0099</span><br><span class="line">  Spanning tree enabled protocol ieee</span><br><span class="line">  Root ID    Priority    32867</span><br><span class="line">             Address     0000.0CB6.3AE1</span><br><span class="line">             Cost        19</span><br><span class="line">             Port        3(FastEthernet0/3)</span><br><span class="line">             ...</span><br><span class="line"></span><br><span class="line">  Bridge ID  Priority    32867  (priority 32768 sys-id-ext 99)</span><br><span class="line">             Address     0001.96E4.9D7A</span><br><span class="line">             ...</span><br><span class="line"></span><br><span class="line">Interface        Role Sts Cost      Prio.Nbr Type</span><br><span class="line">---------------- ---- --- --------- -------- --------------------------------</span><br><span class="line">Fa0/1            Desg FWD 19        128.1    P2p</span><br><span class="line">Fa0/2            Desg FWD 19        128.2    P2p</span><br><span class="line">Fa0/3            Root FWD 19        128.3    P2p</span><br><span class="line">Fa0/4            Altn BLK 19        128.4    P2p</span><br><span class="line"><span class="comment">## 上面的结果分析： VLAN99的STP状态，它的根网桥ID 优先级，MAC地址，本交换机到根网桥路径开销，端口，本交换机的网桥ID 优先级，MAC地址，交换机上的几个端口状态 Desg指定端口，root根端口，FWD转发状态，BLK阻塞状态。</span></span><br><span class="line"><span class="comment">## 省略的结果中每个VLAN的根网桥都是默认选举出的 S2 交换机，考虑到所有VLAN将根网桥设置为S2 可能导致网络性能问题，要设置其他交换机作为根网桥</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 比如设置S1为VLAN 99的根桥，设置优先级4096</span></span><br><span class="line">S1(config)#spanning-tree vlan 99 priority 4096</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/03/网络设备组网应用2-VLAN和VTP配置/" rel="next" title="网络设备组网应用2-VLAN和VTP配置">
+                <i class="fa fa-chevron-left"></i> 网络设备组网应用2-VLAN和VTP配置
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/06/05/网络设备组网应用4-不同VLAN间进行通信的路由配置/" rel="prev" title="网络设备组网应用4-不同VLAN间进行通信的路由配置">
+                网络设备组网应用4-不同VLAN间进行通信的路由配置 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ht</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> </div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a></div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

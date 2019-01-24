@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/icon.png?v=5.1.4">
+
+
+
+
+
+
+  <meta name="keywords" content="Assembly,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="终于有时间总结一下了   基本知识   Debug命令  符号指令  几个汇编程序">
+<meta name="keywords" content="Assembly">
+<meta property="og:type" content="article">
+<meta property="og:title" content="汇编语言学习笔记（80x86）">
+<meta property="og:url" content="http://yoursite.com/2018/05/04/汇编语言学习笔记（80x86）/index.html">
+<meta property="og:site_name" content="ht&#39;s blog">
+<meta property="og:description" content="终于有时间总结一下了   基本知识   Debug命令  符号指令  几个汇编程序">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-01-24T13:05:11.201Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="汇编语言学习笔记（80x86）">
+<meta name="twitter:description" content="终于有时间总结一下了   基本知识   Debug命令  符号指令  几个汇编程序">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"remove","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/05/04/汇编语言学习笔记（80x86）/">
+
+
+
+
+
+  <title>汇编语言学习笔记（80x86） | ht's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ht's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Record something</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/04/汇编语言学习笔记（80x86）/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ht">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ht's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">汇编语言学习笔记（80x86）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-04T00:00:00+08:00">
+                2018-05-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/汇编/" itemprop="url" rel="index">
+                    <span itemprop="name">汇编</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><em>终于有时间总结一下了</em> </p>
+<ul>
+<li><strong>基本知识</strong>  </li>
+<li><strong>Debug命令</strong> </li>
+<li><strong>符号指令</strong> </li>
+<li><strong>几个汇编程序</strong> </li>
+</ul>
+<a id="more"></a>
+<p>#####简单说下汇编语言： </p>
+<p>首先汇编语言是用于微处理器等其他可编程器件的低级语言，直接描述或者控制硬件。不同的设备有其专用的汇编语言（ARM汇编，51汇编）。学习汇编语言还可以帮助理解计算机程序运行。以后学习逆向的话要用到。</p>
+<p>#####寄存器：</p>
+<p>8086 CPU 中寄存器有14个，都是16位。如下：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AX (Accumulator)</td>
+<td>累加寄存器</td>
+<td>IP (Instruction Pointer)</td>
+<td>指令指针寄存器</td>
+</tr>
+<tr>
+<td>BX (Base)</td>
+<td>基址寄存器</td>
+<td>FLAG</td>
+<td>变址寄存器</td>
+</tr>
+<tr>
+<td>CX (Count)</td>
+<td>计数寄存器</td>
+<td>CS (Code Segment)</td>
+<td>代码段</td>
+</tr>
+<tr>
+<td>DX (Data)</td>
+<td>数据寄存器</td>
+<td>DS (Data Segment)</td>
+<td>数据段</td>
+</tr>
+<tr>
+<td>SP (Stack Pointer)</td>
+<td>堆栈指针寄存器</td>
+<td>SS (Stack Segment)</td>
+<td>堆栈段</td>
+</tr>
+<tr>
+<td>BP (Base Pointer)</td>
+<td>基址指针寄存器</td>
+<td>ES (Extra Segment)</td>
+<td>附加段</td>
+</tr>
+<tr>
+<td>SI (Source Index)</td>
+<td>源变址寄存器</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>DI (Destination Index)</td>
+<td>目的变址寄存器</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>20根地址线，而寄存器是16位，采用了16位段寄存器和16位偏移地址的方式寻址。</p>
+<p>实际地址 = 段基址 X 16 + 偏移地址 (即在段地址末位补0再加上偏移地址)</p>
+<p>#####7种寻址方式 </p>
+<ul>
+<li><p>立即寻址</p>
+<p><code>MOV AL,18h</code> ，操作数在指令中，这种操作数作为立即数</p>
+</li>
+<li><p>直接寻址</p>
+<p><code>MOV AX,[0018h]</code> ，[]的内容代表了偏移量。</p>
+<p>当在数据段定义了变量比如 X 后，可以使用</p>
+<p><code>MOV AX,X</code> ，X 代表了它的偏移量</p>
+</li>
+<li><p>寄存器寻址</p>
+<p><code>MOV AX,BX</code> </p>
+</li>
+<li><p>寄存器间接寻址</p>
+<p><code>MOV AX,[SI]</code> ，操作数有效地址在SI DI BX BP中，前3个表示基址在DS，后1个表示在SS</p>
+</li>
+<li><p>寄存器相对寻址</p>
+<p><code>MOV AX,NUM[BX]</code> ，表示 AX = (DS X 16 + OFFSET NUM + BX)</p>
+</li>
+<li><p>基址加变址寻址</p>
+<p><code>MOV AX,[BX][SI]</code> ，表示 AX = (DX X 16 + BX + SI )</p>
+</li>
+<li><p>相对基址加变址寻址</p>
+<p><code>MOV AX,NUM [BX][SI]</code> ，(AX = DS X 16 + BX + SI + OFFSET NUM)</p>
+</li>
+</ul>
+<p>#####生成可执行程序的过程 </p>
+<p>编辑汇编代码  生成汇编的源文件 .asm -&gt;  汇编生成目标文件 .obj -&gt; 连接生成可执行文件 .exe -&gt; 调试运行</p>
+<p>#####Debug常见指令</p>
+<ul>
+<li>D命令：查看指定内存范围的数据；</li>
+<li>G命令：连续运行指定范围的程序指令段；</li>
+<li>T命令：执行指定的一条或者多条指令 ，以分解出的基本指令为单位；</li>
+<li>P命令：执行指定的一条或者多条指令，以助记符指令为单位；</li>
+<li>R命令：显示和修改指定寄存器的值；</li>
+<li>E命令：修改指定内存范围的数据；</li>
+<li>Q命令：退出DEBUG</li>
+</ul>
+<p>#####汇编指令 </p>
+<ul>
+<li><p><strong>传送指令</strong></p>
+<p>用来赋初值，传送被处理数据，暂存数据</p>
+<p>格式: <code>MOV dst,src</code> </p>
+<ul>
+<li>该指令可以传送的数据位数取决于寄存器的位数和立即数的形式。即不能有  <code>MOV AX,BL</code> , <code>MOV AL,1234H</code> </li>
+<li>操作数中必用一个寄存器。即不能出现  <code>MOV [SI],[1234H]</code> </li>
+<li>不能用 CS 和 IP 作为目的操作数</li>
+<li>不能在段寄存器直接传送数据。即不能出现 <code>MOV DS,ES</code> </li>
+<li>不能用立即数作为目的操作数。即不能出现 <code>MOV 12H,AL</code> </li>
+<li>不能向段寄存器传送立即数。</li>
+</ul>
+</li>
+<li><p><strong>堆栈操作指令</strong></p>
+<p>用于保存或者恢复数据，用于转子或中断时保护现场和恢复现场</p>
+<p>格式:  入栈 <code>PUSH src</code> , 出栈 <code>POP dst</code>  </p>
+<p>通用寄存器出入栈 <code>PUSH AX</code> , <code>POP BX</code> </p>
+<p>段寄存器出入栈 <code>PUSH CS</code> , <code>POP DS</code> </p>
+<p>存储单元出入栈 <code>PUSH [BX+DI]</code> , <code>POP [1234H]</code> </p>
+<ul>
+<li>堆栈操作指令隐含了对 SP 的操作，SP始终指向栈顶存储单元</li>
+<li>8086堆栈操作都是<strong>字操作</strong> ，不允许字节操作，即不能 <code>PUSH AL</code> </li>
+<li>堆栈从高位到低位</li>
+<li>CS寄存器可以入栈，但是不能随意弹出一个数据到 CS，不能 <code>POP CS</code> </li>
+</ul>
+</li>
+<li><p><strong>加法运算指令</strong> </p>
+<p>格式 <code>ADD dst,src</code> </p>
+<p>对 src 和 dst 的字或字节相加，结果放在存放目的操作数的地方，会影响各个状态标志(SF ZF AF PF CF)</p>
+<p><code>ADD reg/mem,reg</code> 或 <code>ADD  reg,reg/mem</code></p>
+<p><code>ADD reg/mem,data</code> </p>
+<p><code>ADD ac,data</code></p>
+<p><strong>产生进位时</strong>，带进位的加法指令格式：</p>
+<p><code>ADC reg/mem,reg</code> 或 <code>ADC  reg,reg/mem</code></p>
+<p><code>ADC reg/mem,data</code></p>
+<p><code>ADC ac,data</code> </p>
+<p>找到一个例子：</p>
+<ul>
+<li><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#现有两个双倍精度字1234FEDCH和11228765H，分别放在数据段中从1000H和2000H开始的存储单元中，低位在前，高位在后。要求相加后所得的和放在从1000H开始的内存单元中。</span><br><span class="line"></span><br><span class="line">#解：对双倍精度字相加，可分为两段进行，先对低位字相加，后对高位字相加。</span><br><span class="line"></span><br><span class="line">MOV SI，1000H；设源指针指向1000H</span><br><span class="line">MOV AX，[SI]；将第一数的低位字取入AX</span><br><span class="line">MOV DI，2000H；设目的指针指向2000H</span><br><span class="line">ADD AX，[DI]；低位字相加</span><br><span class="line">MOV [SI]，AX；存低位字相加之和</span><br><span class="line">MOV AX，[SI+2]；将第一数的高位字取入AX</span><br><span class="line">ADC AX，[DI+2]；两高位字连同进位相加</span><br><span class="line">MOV [SI+2]，AX；存高位字相加之和</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p><strong>减法指令</strong> </p>
+<p>格式: <code>SUB dst,src</code> </p>
+<p>完成两个字或两个字节的相减，结果保存在目的操作数中</p>
+<p><code>SUB reg/mem,reg或SUB  reg,reg/mem</code></p>
+<p><code>SUB reg/mem,data</code></p>
+<p><code>SUB ac,data</code></p>
+<p><strong>有借位的减法指令</strong> </p>
+<p>格式: <code>SBB dst,src</code></p>
+<p>完成两个字或两个字节数相减的同时，将较低位或较低位字节相减时的借位CF减去</p>
+<p><code>SBB reg/mem,reg或SBB  reg,reg/mem</code></p>
+<p><code>SBB reg/mem，data</code></p>
+<p><code>SBB ac，data</code></p>
+</li>
+<li><p><strong>比较指令</strong> </p>
+<p>格式: <code>CMP dst,src</code> </p>
+<p>执行两操作数的相减，影响标志位(CF ZF SF OF)，通过标志位的状态比较两数大小</p>
+<p><code>CMP reg/mem,reg</code> </p>
+<p><code>CMP reg/mem,data</code>  </p>
+<p><code>CMP ac,data</code>  </p>
+</li>
+<li><p><strong>乘法</strong> </p>
+<p><strong>无符号数乘法</strong>指令格式: <code>MUL src</code> </p>
+<p>对于字节操作数，AX = AL * src</p>
+<p>对于字操作数 (DX高字节, AX低字节) = AX * src</p>
+<p><strong>带符号数乘法指令</strong>格式: <code>IMUL src</code></p>
+<p>功能与MUL相同，但是会影响标志位(CF OF)</p>
+</li>
+<li><p><strong>除法</strong></p>
+<p><strong>无符号数除法指令</strong>格式: <code>DIV src</code> </p>
+<p>字节操作数 AX放被除数 AX/src 商在 AL 余数在 AH</p>
+<p>字操作数 DX(高字节) AX(低字节)  放被除数 商在 AX 余数在 DX</p>
+<p><strong>带符号数指令</strong>格式: <code>IDIV src</code> </p>
+<p>要求同上</p>
+<ul>
+<li>除法运算后标志位(AF ZF OF PF CF )都是不确定的（无意义）</li>
+<li>IDIV进行运算时，操作数为双字，商的范围 -32768 到 +32767，为字/字节，商的范围在 -128 到 +127，如果超出范围，CPU将其当作除数为零的情况处理，产生0号中断</li>
+<li>8086指令系统规定 余数的符号和被除数相同 即 -30 / -7 商 4 余 -2</li>
+<li>除法运算要求 16位数 <strong>/</strong> 8位数 或者 32位数 <strong>/</strong> 16位数 不满足该条件的时候，将 8 位被除数放入 AL 中对高8位AH拓展，将16位被除数放入 AX中对高16位DX拓展， 使用专门的指令 CBW CBD</li>
+</ul>
+</li>
+<li><p><strong>逻辑指令</strong></p>
+<p>逻辑与 AND</p>
+<p><code>AND dst,src</code> 结果保存到dst中</p>
+<p><code>AND  reg/mem,reg或AND reg,reg/mem</code></p>
+<p><code>AND reg/mem,data</code></p>
+<p><code>AND ac,data</code></p>
+<p>逻辑或 OR</p>
+<p><code>OR dst,src</code>  </p>
+<p><code>OR reg/mem,reg或OR reg,reg/mem</code></p>
+<p><code>OR reg/mem，data</code></p>
+<p><code>OR ac，data</code></p>
+<p>逻辑异或 XOR</p>
+<p><code>XOR dst,src</code> </p>
+<p><code>XOR reg/mem,reg或XOR  reg,reg/mem</code></p>
+<p><code>XOR reg/mem,data</code></p>
+<p><code>XOR ac,data</code></p>
+<p>逻辑非 NOT</p>
+<p><code>NOT reg/mem</code> </p>
+<p>测试 TEST</p>
+<p>在不改变源操作数的前提下，测试某一位或者某几位是否为1或0，执行的操作是将两个操作数逻辑与，但不回送结果</p>
+<p><code>TEST reg/mem,reg或TEST  reg,reg/mem</code></p>
+<p><code>TEST reg/mem，data</code></p>
+<p><code>TEST ac，data</code></p>
+<p> 例如：</p>
+<p><code>TEST AL,80H</code> 用来检测AL最高位是否为1，若是则 ZF＝0 否则 ZF = 1</p>
+<ul>
+<li>上面的所有指令，NOT不影响标志位，其他四种指令使 CF OF 为0 ，AF无定义，SF ZF 和 PF 取决于运算结果</li>
+</ul>
+<p>​</p>
+</li>
+<li><p><strong>移位</strong></p>
+<p><em>移位次数一般在 CL 中指定</em></p>
+<p>算数左移 SAL</p>
+<ul>
+<li>对带符号数的移位，最低位补0</li>
+</ul>
+<p>算数右移 SAR</p>
+<ul>
+<li>对带符号数的移位，最高位在移位的同时，不变</li>
+</ul>
+<p>逻辑左移 SHL</p>
+<ul>
+<li>对无符号数移位，最低位补0</li>
+</ul>
+<p>逻辑右移 SHR</p>
+<ul>
+<li>对无符号数移位，最高位补0</li>
+</ul>
+</li>
+<li><p><strong>循环移位</strong></p>
+<p>不含进位的循环左移ROL</p>
+<p>不含进位的循环右移ROR</p>
+<ul>
+<li>将当前的最高位移到 CF 位，其余循环移位</li>
+</ul>
+</li>
+</ul>
+<p>  <em>用不含进位的循环移位，循环8次之后数据又恢复了，通过对 CF 位的检测计算出1和0的个数</em></p>
+<p>  含进位的循环左移RCL</p>
+<p>  含进位的循环右移RCR</p>
+<ul>
+<li><p>包括CF位在内的9位循环移位</p>
+<p>​</p>
+<ul>
+<li><strong>功能调用</strong> </li>
+</ul>
+<p>参考<a href="https://www.cnblogs.com/daevae/p/3704324.html" target="_blank" rel="noopener">这篇文章</a></p>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Assembly/" rel="tag"># Assembly</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/06/Blog后续的完善/" rel="next" title="Blog后续的完善">
+                <i class="fa fa-chevron-left"></i> Blog后续的完善
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/05/05/几个汇编程序/" rel="prev" title="几个汇编程序">
+                几个汇编程序 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ht</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> </div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a></div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

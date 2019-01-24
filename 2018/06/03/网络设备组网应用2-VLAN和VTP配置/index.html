@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/icon.png?v=5.1.4">
+
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="VLAN(Virtual Local Area Network)虚拟局域网，是逻辑上的一组设备和用户，VLAN 的划分可基于交换机的端口或设备的 MAC 地址等信息。一组设备和用户之间的通信就像是在一个网段一样。VLAN工作在OSI参考模型的2，3层。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网络设备组网应用2-VLAN和VTP配置">
+<meta property="og:url" content="http://yoursite.com/2018/06/03/网络设备组网应用2-VLAN和VTP配置/index.html">
+<meta property="og:site_name" content="ht&#39;s blog">
+<meta property="og:description" content="VLAN(Virtual Local Area Network)虚拟局域网，是逻辑上的一组设备和用户，VLAN 的划分可基于交换机的端口或设备的 MAC 地址等信息。一组设备和用户之间的通信就像是在一个网段一样。VLAN工作在OSI参考模型的2，3层。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="c:/Users/ysbdx/Pictures/BLOG/2-拓扑图.PNG">
+<meta property="og:updated_time" content="2019-01-24T13:34:27.463Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="网络设备组网应用2-VLAN和VTP配置">
+<meta name="twitter:description" content="VLAN(Virtual Local Area Network)虚拟局域网，是逻辑上的一组设备和用户，VLAN 的划分可基于交换机的端口或设备的 MAC 地址等信息。一组设备和用户之间的通信就像是在一个网段一样。VLAN工作在OSI参考模型的2，3层。">
+<meta name="twitter:image" content="c:/Users/ysbdx/Pictures/BLOG/2-拓扑图.PNG">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"remove","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/06/03/网络设备组网应用2-VLAN和VTP配置/">
+
+
+
+
+
+  <title>网络设备组网应用2-VLAN和VTP配置 | ht's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ht's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Record something</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/03/网络设备组网应用2-VLAN和VTP配置/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ht">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ht's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">网络设备组网应用2-VLAN和VTP配置</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-03T00:00:00+08:00">
+                2018-06-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/交换机/" itemprop="url" rel="index">
+                    <span itemprop="name">交换机</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong>VLAN</strong>(Virtual Local Area Network)<strong>虚拟局域网</strong>，是逻辑上的一组设备和用户，VLAN 的划分可基于交换机的端口或设备的 MAC 地址等信息。一组设备和用户之间的通信就像是在一个网段一样。VLAN工作在OSI参考模型的2，3层。</p>
+<a id="more"></a>
+<p>接下来的操作是基于端口的VLAN设计与配置实现，基于端口的VLAN配置实现分为两个步骤：</p>
+<ol>
+<li><strong>创建VLAN</strong></li>
+<li><strong>设置各个端口的模式，并将其指派到对应的VLAN中</strong></li>
+</ol>
+<h4 id="1-创建VLAN"><a href="#1-创建VLAN" class="headerlink" title="1. 创建VLAN"></a>1. 创建VLAN</h4><p><strong>创建VLAN</strong>的方法有两种：</p>
+<ul>
+<li><p>在每台交换机上手动设置每个VLAN</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 手动配置VLAN的命令</span></span><br><span class="line"><span class="comment"># 全局配置模式下创建一个VLAN</span></span><br><span class="line">vlan 9 </span><br><span class="line"><span class="comment"># 全局配置模式下删除一个VLAN</span></span><br><span class="line">no vlan 9</span><br><span class="line"><span class="comment"># VLAN配置模式下设置VLAN名</span></span><br><span class="line">name vlan-name </span><br><span class="line"><span class="comment"># 特权模式下显示VLAN的信息</span></span><br><span class="line">show vlan [brief]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用VLAN中继协议(VLAN Trunk Protocol, VTP)设置和管理整个域中的VLAN</p>
+<p>VTP是一个2层协议，基本思想是：在VTP管理域内使用第二层的加标帧，自动发布VLAN配置信息，从而实现VLAN的添加，修改和删除，保证所有交换机配置一致。</p>
+<blockquote>
+<p>使用VTP配置VLAN的过程：首先在VTP域内的一台交换机上手动设置VLAN信息，然后这台交换机将携带这些VLAN信息的VTP帧通过 <strong>中继链路</strong> 上的 <strong>本征VLAN</strong> 传递给VTP域内的其他交换机，其他交换机从接收到的VTP消息中自动学习配置 已经创建的VLAN。</p>
+</blockquote>
+<p><strong>关于VTP的几个概念</strong>：</p>
+<ul>
+<li><p>VTP管理域：</p>
+<p>携带 VLAN 配置信息的 VTP 消息的发布范围是由 VTP 管理域控制的，一个 VTP 域内的 VTP 消息只能在该域内传播。 </p>
+<p>一台交换机只能属于一个 VTP 域。一个 VTP 域内所有参与 VTP 的交换机必须具 有一个相同的 VTP 域名。如果一台交换机不是某个 VTP 域的成员，它将不能收到发 往该域的 VTP 消息。</p>
+<p>在一个 VTP 域内必须使用相同版本的 VTP 协议。思科交换机缺省运行版本 2 的 VTP 协议。 </p>
+</li>
+<li><p>VTP模式：</p>
+<p>分别是服务器模式server，客户端模式client，透明模式transparent</p>
+</li>
+<li><p>VTP剪枝：</p>
+<p>根据交换机拥有的VLAN，丢弃不需要的广播流量，增强带宽的利用率，该功能默认关闭</p>
+</li>
+<li><p><strong>VTP的配置指令</strong>：</p>
+<p>开启／关闭VTP协议，配置VTP域名，配置交换机模式，配置VTP口令，配置VTP剪枝。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 全局配置模式下设置交换机VTP模式</span></span><br><span class="line">vtp mode &#123;server|client|transparent&#125; </span><br><span class="line"><span class="comment"># 全局配置模式下设置VTP域名</span></span><br><span class="line">vtp domain domain-name </span><br><span class="line"><span class="comment"># 全局配置模式下配置VTP域口令</span></span><br><span class="line">vtp password &#123;your_password&#125; </span><br><span class="line"><span class="comment"># 特权模式下显示VTP的设置信息</span></span><br><span class="line">show vtp status</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><strong>使用第2个方法创建VLAN时，注意</strong>：</p>
+<ul>
+<li>交换机需要开启VLAN特性</li>
+<li>VLAN1 和 VLAN 1002-1005 时保留的VLAN，不可创建或者删除。VLAN1是所有端口的缺省VLAN也是默认的管理VLAN</li>
+<li>思科交换机VLAN配置文件保存在Flash中 <strong>vlan.dat</strong> 文件，配置前检查并删除该文件，输入<code>reload</code> 命令重启交换机</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-设置端口模式并指派VLAN"><a href="#2-设置端口模式并指派VLAN" class="headerlink" title="2. 设置端口模式并指派VLAN"></a>2. 设置端口模式并指派VLAN</h4><p>交换机的端口有中继(trunk)和接入(access)两种工作模式，分别对应中继链路(trunk link)和接入链路(access link)</p>
+<p><strong>VLAN中继段口</strong></p>
+<p>交换机的 VLAN 中继端口用来互连 VLAN 知晓交换机。一个中继端口可加入到多个已创建的 VLAN 中，提供跨交换机的多 VLAN 中继功能。 </p>
+<ul>
+<li><p><strong>VLAN中继协议</strong></p>
+<p>要实现跨交换机的多 VLAN 中继功能，在中继链路上传送的数据帧中必须携带 VLAN 标识（VLAN ID），以便交换机能识别出该数据帧来自哪个 VLAN，从而实施正确的转发策略。这些携带有 VLAN ID信息的数据帧通常被称为“VLAN 加标帧” 或“VLAN 标记帧”。 </p>
+<p>VLAN 中继协议标准为 IEEE 802.1Q。该协议在标准 MAC 帧的头部增加一个 VLAN 标记字段（4 个字节），其中包含 VLAN ID。所有厂商的 VLAN 知晓交换机和 路由器产品都支持 802.1Q 协议。 </p>
+</li>
+<li><p><strong>VLAN 中继端口的转发操作</strong> </p>
+<p>VLAN 中继端口能收发 VLAN 标记帧和无 VLAN 标记帧。VLAN 中继端口会将无标记帧发送到本征 VLAN。默认的本征 VLAN 是 VLAN 1。 </p>
+</li>
+<li><p><strong>VLAN 中继端口的配置指令</strong></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将端口设置为中继模式</span></span><br><span class="line">switchport mode trunk  </span><br><span class="line"><span class="comment"># 将中继端口加入到所有 VLAN 中</span></span><br><span class="line">switchport trunk allowed vlan all</span><br><span class="line"><span class="comment"># 设置中继端口的本征VLAN</span></span><br><span class="line">switchport trunk native vlan9</span><br><span class="line"><span class="comment"># 查看交换机端口的模式及 VLAN 信息</span></span><br><span class="line">show interfaces interface-id switchport </span><br><span class="line"><span class="comment"># 查看交换机的中继端口</span></span><br><span class="line">show interfaces trunk</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><strong>VLAN接入端口</strong></p>
+<p>交换机的接入端口只能连接 VLAN 非知晓设备(如普通的 PC 机)。一个接入端口只能加入到一个已创建的 VLAN 中，并且只能收发无 VLAN 标记帧。</p>
+<p><strong>接入端口的配置指令</strong>：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 接口配置模式下将该端口设置成接入端口</span></span><br><span class="line">switchport mode access</span><br><span class="line"><span class="comment"># 接口配置模式下将该端口加入到指定VLAN，本例为vlan9</span></span><br><span class="line">switchport access vlan vlan9</span><br></pre></td></tr></table></figure>
+<h4 id="配置VTP示例"><a href="#配置VTP示例" class="headerlink" title="配置VTP示例"></a>配置VTP示例</h4><p>拓扑图</p>
+<p><img src="C:\Users\ysbdx\Pictures\BLOG\2-拓扑图.PNG" alt="2-拓扑图"></p>
+<ol>
+<li><p>为每台交换机配置VTP模式</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># S1设置为服务器，S2,S3设置为客户端</span></span><br><span class="line">S1(config)#vtp mode server</span><br><span class="line">S2(config)#vtp mode client</span><br><span class="line">S3(config)#vtp mode client</span><br><span class="line"></span><br><span class="line"><span class="comment"># 三台交换机配置VTP域名：L2</span></span><br><span class="line">S1(config)#vtp domain L2</span><br><span class="line">S2(config)#vtp domain L2</span><br><span class="line">S3(config)#vtp domain L2</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置VLAN</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在S1上创建所有VLAN</span></span><br><span class="line">S1(config)#vlan 10 </span><br><span class="line">S1(config-vlan)#name Staff</span><br><span class="line">S1(config-vlan)#exit</span><br><span class="line">S1(config)#int vlan10</span><br><span class="line">S1(config-if)#</span><br><span class="line">%LINK-5-CHANGED: Interface Vlan10, changed state to up</span><br><span class="line">S1(config-if)#exit</span><br><span class="line"></span><br><span class="line">S1(config)#vlan 20 </span><br><span class="line">S1(config-vlan)#name Student</span><br><span class="line">S1(config-vlan)#exit</span><br><span class="line">S1(config)#int vlan20</span><br><span class="line">S1(config-if)#</span><br><span class="line">%LINK-5-CHANGED: Interface Vlan20, changed state to up</span><br><span class="line">S1(config-if)#exit</span><br><span class="line"></span><br><span class="line">S1(config)#vlan 30</span><br><span class="line">S1(config-vlan)#name Guest</span><br><span class="line">S1(config-vlan)#exit</span><br><span class="line">S1(config)#int vlan30</span><br><span class="line">S1(config-if)#</span><br><span class="line">%LINK-5-CHANGED: Interface Vlan30, changed state to up</span><br><span class="line">S1(config-if)#exit</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>   <strong>注意此时还没有配置VLAN中继所以，S1的 VLAN的信息不能被其他交换机接收</strong></p>
+<ol start="3">
+<li><p>配置VLAN中继</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 根据拓扑图，将S1 Fa0/1 和 Fa0/3 设置为中继段口</span></span><br><span class="line">S1(config)#int fa0/1</span><br><span class="line">S1(config-if)#switchport mode trunk</span><br><span class="line">S1(config-if)#</span><br><span class="line">%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/1, changed state to down</span><br><span class="line">%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/1, changed state to up</span><br><span class="line"></span><br><span class="line">S1(config)#int fa0/3</span><br><span class="line">S1(config-if)#switchport mode trunk</span><br><span class="line">S1(config-if)#</span><br><span class="line">%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/1, changed state to down</span><br><span class="line">%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/1, changed state to up</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在其他交换机上检查是否有S1配置的VLAN信息</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">S2#show vtp status</span><br><span class="line">S2#show vlan</span><br><span class="line"></span><br><span class="line"><span class="comment">#理论上到这里就有了S1的VLAN</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>为每个VLAN分配端口</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 按照拓扑图将VLAN分配给S2 S3上的接入端口</span></span><br><span class="line">S2(config)#int fa0/11</span><br><span class="line">S2(config-if)#switchport mode access</span><br><span class="line">S2(config-if)#switchport access vlan 10</span><br><span class="line"></span><br><span class="line">S3(config)#int fa0/11</span><br><span class="line">S3(config-if)#switchport mode access</span><br><span class="line">S3(config-if)#switchport access vlan 10</span><br><span class="line"></span><br><span class="line"><span class="comment">#在PC1 和 PC4的命令行中互ping，此时可以Ping通，而不同VLAN中的PC不能Ping通</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/02/网络设备组网应用1-基本交换机配置/" rel="next" title="网络设备组网应用1-交换机的配置方法">
+                <i class="fa fa-chevron-left"></i> 网络设备组网应用1-交换机的配置方法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/06/04/网络设备组网应用3-STP配置/" rel="prev" title="网络设备组网应用3-STP配置">
+                网络设备组网应用3-STP配置 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ht</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> </div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a></div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

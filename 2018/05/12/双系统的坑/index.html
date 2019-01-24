@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/icon.png?v=5.1.4">
+
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="###1.安装完成卡死在登录界面和在登录界面循环 ###2.Ubuntu的grubx64.efi替换Microsoft的bootmgfw.efi之后没效果">
+<meta property="og:type" content="article">
+<meta property="og:title" content="双系统的坑">
+<meta property="og:url" content="http://yoursite.com/2018/05/12/双系统的坑/index.html">
+<meta property="og:site_name" content="ht&#39;s blog">
+<meta property="og:description" content="###1.安装完成卡死在登录界面和在登录界面循环 ###2.Ubuntu的grubx64.efi替换Microsoft的bootmgfw.efi之后没效果">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/img/recovery.png">
+<meta property="og:image" content="http://yoursite.com/img/Driver.png">
+<meta property="og:image" content="http://yoursite.com/img/win10.png">
+<meta property="og:image" content="http://yoursite.com/img/grub2.png">
+<meta property="og:updated_time" content="2019-01-24T13:29:28.543Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="双系统的坑">
+<meta name="twitter:description" content="###1.安装完成卡死在登录界面和在登录界面循环 ###2.Ubuntu的grubx64.efi替换Microsoft的bootmgfw.efi之后没效果">
+<meta name="twitter:image" content="http://yoursite.com/img/recovery.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"remove","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/05/12/双系统的坑/">
+
+
+
+
+
+  <title>双系统的坑 | ht's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ht's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Record something</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/12/双系统的坑/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ht">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ht's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">双系统的坑</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-12T00:00:00+08:00">
+                2018-05-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Windows/" itemprop="url" rel="index">
+                    <span itemprop="name">Windows</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>###1.安装完成卡死在登录界面和在登录界面循环</p>
+<p>###2.Ubuntu的grubx64.efi替换Microsoft的bootmgfw.efi之后没效果</p>
+<a id="more"></a>
+<hr>
+<p><strong>安装完成卡死在登录界面，输入用户密码之后，没有反应，鼠标可以移动，CTRL+ALT+F1也没反应</strong></p>
+<p>尝试：</p>
+<p>1.进入tty，输入 ps -t tty7 然后 kill （Xorg的PID）。</p>
+<p>2.添加用户对 .Xauthority的权限。</p>
+<p>3.安装过Nvidia驱动。</p>
+<p>发现是Nvidia显卡驱动的问题</p>
+<p>具体原因：</p>
+<hr>
+<p><strong>首先要知道root密码</strong></p>
+<p>进入grub引导时，选择下面的Recovery模式</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">resume Resume normal boot(继续以正常模式启动)</span><br><span class="line">clean Try to make free space(清理软件包)</span><br><span class="line">dpkg Repair broken packages(修复损坏的已安装的软件包)</span><br><span class="line">fsck Check all file systems(硬盘检查与修复坏道)</span><br><span class="line">grub update grub bootloader(更新grub引导移除不必要的选项)</span><br><span class="line">network Enable networking(带网络连接的shell)</span><br><span class="line">root Drop to root shell prompt(命令行最高管理员级别shell，需要自行开启网络)</span><br></pre></td></tr></table></figure>
+<p>参考：<a href="https://www.moonlol.com/ubuntu-linux-recovery-mode-4965.html" target="_blank" rel="noopener">Ubuntu Linux Recovery Mode安全模式中文說明
+</a></p>
+<p><strong>修改root密码</strong></p>
+<p><strong>修改密码需要有读写权限</strong></p>
+<p>我的办法是点第二个<strong>clean</strong>，会提示开启读写，运行完之后，回车，再点下面的root。</p>
+<blockquote>
+<p>看到别人是这样解决 <code>mount -orw remount</code>但是我没尝试</p>
+</blockquote>
+<p><strong>选择下面root进入命令行</strong>。</p>
+<p><img src="/img/recovery.png" alt="Recovery菜单"><br><em>途中最上面一行显示目前权限态为只读，需要换到读写，方法可以参考上面</em></p>
+<p>输入：<code>passwd</code>，按照提示更改 root 密码。</p>
+<p>然后 <strong>CTRL+C</strong> 退出，回到刚才的界面，点击第一个<strong>resume</strong>，可能需要点两次才正常启动。</p>
+<p>到登陆界面输入用户密码，可以进入桌面，然而还没完，现在重装<strong>NVIDIA驱动</strong>。(要在联网环境下进行)</p>
+<p>推荐在<strong>命令行</strong>下重新安装Nvidia驱动。</p>
+<p><strong>下面的在root权限下进行</strong>，用的是<a href="http://htoc.top/post/1#2" target="_blank" rel="noopener">阿里云的源</a> &lt;&lt;</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#更新</span></span><br><span class="line">apt-get update</span><br><span class="line"><span class="comment">#卸载</span></span><br><span class="line">apt-get remove --purge nvidia-*</span><br><span class="line">apt-get autoremove</span><br><span class="line"><span class="comment">#修复依赖</span></span><br><span class="line">apt-get install -f</span><br><span class="line">reboot</span><br><span class="line"><span class="comment">#重启进入到登录界面之后</span></span><br><span class="line"><span class="comment">#按住CTRL+ALT+F1进入tty模式，用root登录</span></span><br><span class="line">apt-get install nvidia-375</span><br></pre></td></tr></table></figure>
+<hr>
+<p>↓↓↓下面这个安装驱动的方法可能随时失效。<br><img src="/img/Driver.png" alt="附加驱动"><br><del>图形界面搜索 update或者更新（取决于你的系统语言）</del><br><del>在附加驱动那里，找到Nvidia驱动，安装，提示输入root密码，装完重启。就可以解决这个问题了。</del></p>
+<hr>
+<p><strong>在 /boot/efi/EFI目录下，想用grub2引导替换Win10的默认引导，重启之后，发现一到grub引导界面就重启。</strong></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#备份</span></span><br><span class="line">sudo cp -a Microsoft win10</span><br><span class="line"><span class="comment">#替换</span></span><br><span class="line">sudo cp -af Ubuntu/grubx64.efi Microsoft/Boot/bootmgfw.efi</span><br><span class="line"><span class="comment">#更新</span></span><br><span class="line">sudo update-grub</span><br></pre></td></tr></table></figure>
+<p>修改 /boot/grub/grub.cfg</p>
+<p>找到Windows10的目录，把Microsoft替换为win10</p>
+<p><code>sudo vim /boot/grub/grub.cfg</code></p>
+<p><img src="/img/win10.png" alt="grub.cfg WIN10"></p>
+<p>重启之后，发现一到grub引导界面就重启。发现是BIOS里面的<strong>bios security</strong>打开着，关闭之后，重启，解决。</p>
+<p><strong>换一个grub主题</strong>(<a href="https://www.gnome-look.org/browse/cat/109/ord/latest/" target="_blank" rel="noopener">link</a>)</p>
+<p><img src="/img/grub2.png" alt="主题"></p>
+<p>去链接那里下载一个主题包。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#创建文件夹</span></span><br><span class="line">sudo mkdir /boot/grub/themes</span><br><span class="line"><span class="comment">#解压文件</span></span><br><span class="line">sudo tar -xf 你下载的包</span><br><span class="line"><span class="comment">#复制到刚才创建的themes文件夹下面</span></span><br><span class="line">sudo cp -a 解压的包  /boot/grub/themes/</span><br><span class="line"><span class="comment">#更改配置文件</span></span><br><span class="line">sudo vim /etc/grub.d/00_header</span><br><span class="line"><span class="comment">#添加</span></span><br><span class="line">**最后面的theme.txt可能是themes.txt**</span><br><span class="line">grub_theme=<span class="string">"/boot/grub/themes/解压的包/theme.txt"</span></span><br><span class="line">grub_gfxmode=<span class="string">"1920x1080x32"</span></span><br></pre></td></tr></table></figure>
+<p>如果没有效果的话，那就是还要修改/etc/default/grub<br><code>gedit /etc/default/grub</code><br>添加:<br><code>grub_theme=&quot;/boot/grub/themes/解压的包/themes.txt&quot;</code></p>
+<hr>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/09/安装Windows10+Ubuntu16.04双系统/" rel="next" title="Windows10 + Ubuntu16.04双系统">
+                <i class="fa fa-chevron-left"></i> Windows10 + Ubuntu16.04双系统
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/05/21/Windows10远程桌面/" rel="prev" title="Windows10远程桌面">
+                Windows10远程桌面 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ht</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> </div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a></div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

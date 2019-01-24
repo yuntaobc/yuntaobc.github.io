@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/icon.png?v=5.1.4">
+
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="过程目录 1. 购买阿里云服务器2. 配置LAMP环境3. 页面排版4. 代码5. 确定使用Markdown编辑器6. Markdown文本渲染及Highlight7. 后续完善">
+<meta property="og:type" content="article">
+<meta property="og:title" content="搭建Blog环境">
+<meta property="og:url" content="http://yoursite.com/2018/03/02/搭建Blog环境/index.html">
+<meta property="og:site_name" content="ht&#39;s blog">
+<meta property="og:description" content="过程目录 1. 购买阿里云服务器2. 配置LAMP环境3. 页面排版4. 代码5. 确定使用Markdown编辑器6. Markdown文本渲染及Highlight7. 后续完善">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-01-24T13:16:31.353Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="搭建Blog环境">
+<meta name="twitter:description" content="过程目录 1. 购买阿里云服务器2. 配置LAMP环境3. 页面排版4. 代码5. 确定使用Markdown编辑器6. Markdown文本渲染及Highlight7. 后续完善">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"remove","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/03/02/搭建Blog环境/">
+
+
+
+
+
+  <title>搭建Blog环境 | ht's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ht's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Record something</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/02/搭建Blog环境/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ht">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ht's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">搭建Blog环境</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-02T00:00:00+08:00">
+                2018-03-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Blog/" itemprop="url" rel="index">
+                    <span itemprop="name">Blog</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="过程目录"><a href="#过程目录" class="headerlink" title="过程目录"></a>过程目录</h1><hr>
+<h3 id="1-购买阿里云服务器"><a href="#1-购买阿里云服务器" class="headerlink" title="1. 购买阿里云服务器"></a>1. 购买阿里云服务器</h3><h3 id="2-配置LAMP环境"><a href="#2-配置LAMP环境" class="headerlink" title="2. 配置LAMP环境"></a>2. 配置LAMP环境</h3><h3 id="3-页面排版"><a href="#3-页面排版" class="headerlink" title="3. 页面排版"></a>3. 页面排版</h3><h3 id="4-代码"><a href="#4-代码" class="headerlink" title="4. 代码"></a>4. 代码</h3><h3 id="5-确定使用Markdown编辑器"><a href="#5-确定使用Markdown编辑器" class="headerlink" title="5. 确定使用Markdown编辑器"></a>5. 确定使用Markdown编辑器</h3><h3 id="6-Markdown文本渲染及Highlight"><a href="#6-Markdown文本渲染及Highlight" class="headerlink" title="6. Markdown文本渲染及Highlight"></a>6. Markdown文本渲染及Highlight</h3><h3 id="7-后续完善"><a href="#7-后续完善" class="headerlink" title="7. 后续完善"></a>7. 后续完善</h3><a id="more"></a>
+<blockquote>
+<p>还不太熟悉Markdown的语法，可能排版会有问题</p>
+</blockquote>
+<h4 id="1-购买服务器"><a href="#1-购买服务器" class="headerlink" title="1.购买服务器"></a>1.购买服务器</h4><p>如果购买了域名要解析到你的服务器，要考虑是否要去备案。懒得备案的就去买海外的服务器供应商的产品，在大陆供应商购买的就需要去备个案了。</p>
+<p>关于<strong>域名</strong> 的选择，国内注册的话，好像是不把域名的全部权限都给你的，这种情况下可能导致你的域名随时被国家收回。但是国外的话一般就不是这个样子。</p>
+<p>买阿里云服务器之前，听说有更便宜腾讯云方案，学生机1块/月。但是稍微找了找没看到。目前10块/月的阿里云也可以接受吧！</p>
+<blockquote>
+<p>另外购买阿里云服务器学生优惠需要经过一次学生认证。</p>
+</blockquote>
+<h4 id="2-配置LAMP环境-1"><a href="#2-配置LAMP环境-1" class="headerlink" title="2. 配置LAMP环境"></a>2. 配置LAMP环境</h4><p>在<strong>虚拟机</strong>安装的镜像需要换源</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">sudo vim /etc/apt/sources.list</span><br><span class="line"></span><br><span class="line">换成</span><br><span class="line"><span class="comment">#deb包</span></span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial main restricted universe multiverse  </span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-security main restricted universe multiverse  </span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-updates main restricted universe multiverse  </span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-backports main restricted universe multiverse  </span><br><span class="line"><span class="comment">##测试版源  </span></span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-proposed main restricted universe multiverse  </span><br><span class="line"><span class="comment"># 源码  </span></span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ xenial main restricted universe multiverse  </span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ xenial-security main restricted universe multiverse  </span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ xenial-updates main restricted universe multiverse </span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ xenial-backports main restricted universe multiverse  </span><br><span class="line"><span class="comment">##测试版源  </span></span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ xenial-proposed main restricted universe multiverse</span><br></pre></td></tr></table></figure>
+<p><strong>先敲下这两行代码</strong></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt-get update</span><br><span class="line">apt-get upgrade</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>UPDATE: update is used to download package information from all configured sources.</p>
+<p>UPGRADE: upgrade is used to install available upgrades of all packages currently installed on the system from the sources configured via sources.list</p>
+<p>apt-get是某些linux发行版使用的一个“包管理器” 包管理器的作用是从源（Source）服务器下载最新的软件包，当你（apt-get install）的时候，就是从这个列表查询软件包的信息，添加到同时安装的列表里，然后下载安装。 这个软件包列表需要用户使用apt-get upate更新。 而upgrade则是对已安装的软件更新的过程。</p>
+</blockquote>
+<h3 id="接下来安装包"><a href="#接下来安装包" class="headerlink" title="接下来安装包"></a>接下来安装包</h3><blockquote>
+<p>如果apt-get install 软件 失败</p>
+<p>换成 sudo apt-get install</p>
+</blockquote>
+<p><strong>Apache2</strong></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt-get install apache2</span><br><span class="line">apt-get install libapache2-mod-php</span><br></pre></td></tr></table></figure>
+<p><strong>Mysql</strong></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt-get install mysql-server</span><br><span class="line">apt-get install php7.0-mysql</span><br></pre></td></tr></table></figure>
+<p><strong>PHP7</strong></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install php7.0 php7.0-curl php7.0-gd php7.0-json php7.0-opcache php7.0-xml mcrypt php7.0-curl php7.0-cgi php7.0-xmlrpc php7.0-gd php-pear</span><br></pre></td></tr></table></figure>
+<p> 重启Apache2和MySQL</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">service apache2 restart</span><br><span class="line">service mysql restart</span><br></pre></td></tr></table></figure>
+<p>测试php和apache2 </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">先安装vim</span><br><span class="line">apt-get install vim</span><br><span class="line"></span><br><span class="line">sudo vim /var/www/html/info.php</span><br><span class="line">输入:</span><br><span class="line">&lt;?php</span><br><span class="line">phpinfo();</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<p>保存后访问</p>
+<p>ip(127.0.0.1或公网ip)/info.php</p>
+<p>若有信息就说明成功，否则可能是缺少了某个PHP模块。</p>
+<blockquote>
+<p>安装完成后 输入</p>
+<p>sudo apt-get upgrade</p>
+<p>升级包</p>
+</blockquote>
+<h4 id="3-页面排版-1"><a href="#3-页面排版-1" class="headerlink" title="3.页面排版"></a>3.页面排版</h4><p>完全取决于个人喜好，如果没有想法，可以多看一下别人的博客，或者从Worldpress里面找找看的上的。</p>
+<h4 id="4-代码-1"><a href="#4-代码-1" class="headerlink" title="4. 代码"></a>4. 代码</h4><p>为了练练手，代码除了 编辑器来自<a href="http://pandao.github.io/editor.md/" target="_blank" rel="noopener">Edit.MD</a> Markdown渲染来自<a href="http://parsedown.org/" target="_blank" rel="noopener">Parsedown</a> 代码Highlight来自<a href="http://prismjs.com/" target="_blank" rel="noopener">Prism</a>其他都是自己写的，暂时没做手机端的页面。可以自己去找主题模板</p>
+<p>####5.确定使用Markdown编辑器</p>
+<p>两个选择，最初的富文本编辑器和Markdown编辑器。坚决的选择了Markdown，简明而且排版可以不依赖鼠标了。</p>
+<h4 id="6-Markdown文本渲染及Highlight-1"><a href="#6-Markdown文本渲染及Highlight-1" class="headerlink" title="6. Markdown文本渲染及Highlight"></a>6. Markdown文本渲染及Highlight</h4><p>Markdown渲染来自<a href="http://parsedown.org/" target="_blank" rel="noopener">Parsedown</a> 代码Highlight来自<a href="http://prismjs.com/" target="_blank" rel="noopener">Prism</a>(估计要换成其他的了)</p>
+<h3 id="7-后续完善-1"><a href="#7-后续完善-1" class="headerlink" title="7. 后续完善"></a>7. 后续完善</h3><p>… …</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/04/配置服务器/" rel="prev" title="配置服务器">
+                配置服务器 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ht</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> </div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a></div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
